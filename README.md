@@ -126,45 +126,6 @@ python main.py --figure "Elon Musk" --scenario "..." --refresh
 
 ---
 
-## Project Structure / 项目结构
-
-```
-ai_agent_personal/
-├── agents/
-│   ├── orchestrator.py              # LangGraph workflow + per-figure caching
-│   ├── agent_info_collector.py      # Agent 1: Web scraping (Wikipedia + DDG)
-│   ├── agent_event_extractor.py     # Agent 2a: Parallel event extraction
-│   ├── agent_event_refiner.py       # Agent 2b: Coverage evaluation + gap queries
-│   ├── agent_macro_analyst.py       # Agent 3: Big Five + Bourdieu
-│   ├── agent_social_cognitive.py    # Agent 4: Bandura social cognitive theory
-│   ├── agent_belief_decomposer.py   # Agent 5: Theory of Planned Behavior
-│   └── agent_behavior_predictor.py  # Agent 6: Behavioral prediction
-├── config/
-│   ├── settings.py                  # Global settings, paths, env vars
-│   └── prompts.py                   # All LLM system prompts and task templates
-├── rag/
-│   └── vector_retriever.py          # FAISS vector retrieval (auto-detects format)
-├── utils/
-│   └── text_processor.py            # Document loading (.txt, .md, .pdf, .docx)
-├── scripts/
-│   ├── build_psychology_vectorstores.py  # Build FAISS indices from psychology books
-│   └── test_google_search.py             # Diagnostic: test web search availability
-├── data/
-│   └── processed/
-│       ├── figures_registry.json    # Index of all analyzed figures
-│       └── {figure_name}/           # Per-figure output folder
-│           ├── events.json
-│           ├── macro_analysis.json
-│           ├── social_cognitive.json
-│           ├── belief_analysis.json
-│           └── behavior_prediction.json
-├── .env                             # API keys and configuration (not committed)
-├── .env.example                     # Template for .env
-└── main.py                          # CLI entry point
-```
-
----
-
 ## Caching / 缓存机制
 
 The system caches results per figure to avoid redundant LLM calls:
@@ -208,24 +169,7 @@ All analysis results are saved as JSON. Key output files:
 
 ---
 
-## Key Design Decisions / 关键设计决策
 
-**Parallel extraction / 并行提取**
-`EventExtractorAgent` splits biography text into chunks and calls the LLM in parallel using `ThreadPoolExecutor`, then merges results in original order. This reduces extraction time from O(n) sequential to approximately O(1/workers).
-
-**Temporal gap detection / 时间空白检测**
-`EventRefinerAgent` detects gaps ≥ 3 years in the figure's own lifetime (gaps before birth year are ignored to avoid ancestral history false positives). Gaps trigger LLM-generated targeted search queries rather than generic biography lookups.
-
-**Collective profiling / 集体侧写**
-All three analysis agents receive the full event list in a single LLM call rather than analyzing events one by one. This produces coherent cross-event patterns and reduces API calls by ~50×.
-
-**Per-figure folder isolation / 人物目录隔离**
-Each figure gets a dedicated `data/processed/{name}/` folder. All agents dynamically point to this folder at runtime (`agent.data_dir = figure_dir`), so filenames are short (e.g. `events.json`) and outputs never collide across figures.
-
-**LangGraph fan-out / LangGraph 并行分支**
-The three analysis agents run as parallel LangGraph nodes. Each node returns **only the keys it modifies** (not the full state dict) — this is required by LangGraph to avoid `InvalidUpdateError` when merging parallel branch results.
-
----
 
 ## Troubleshooting / 常见问题
 

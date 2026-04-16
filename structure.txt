@@ -1,0 +1,58 @@
+psychological_analysis_agent/
+│
+├── README.md
+├── requirements.txt
+├── .env                                    # API keys 配置
+│
+├── config/
+│   ├── __init__.py
+│   ├── settings.py                         # 全局配置（模型、路径、API）
+│   └── prompts.py                          # 所有 Agent 的 System Prompts
+│
+├── agents/                                 # Agent 模块（四层分析）
+│   ├── __init__.py
+│   ├── orchestrator.py                     # 主控 Agent：流程编排与任务分发
+│   ├── agent_event_extractor.py            # Agent 1：事件提取与总结
+│   ├── agent_macro_analyst.py              # Agent 2：宏观分析（大五+布迪厄）
+│   ├── agent_belief_decomposer.py          # Agent 3：信念拆解（行为/规范/控制）
+│   └── agent_behavior_predictor.py         # Agent 4：行为倾向预测
+│
+├── knowledge/                              # RAG 知识库
+│   ├── vector_stores/                      # 向量数据库（FAISS/Qdrant）
+│   │   ├── psychology_theory/              # 心理学理论书籍向量库
+│   │   └── figure_biography/               # 公众人物生平数据向量库
+│   ├── graph_db/                           # 知识图谱（可选，用于 GraphRAG）
+│   │   ├── schema.yaml                     # 图谱 schema
+│   │   └── entries/                        # 图谱实体数据
+│   └── source_docs/                        # 原始文档
+│       ├── psychology_books/               # 心理学书籍 PDF/Markdown
+│       └── biographies/                    # 传记、访谈、公开言论
+│
+├── data/                                   # 数据层
+│   ├── raw/                                # 原始数据
+│   │   └── {figure_name}/
+│   │       ├── biography.txt
+│   │       ├── interviews.json
+│   │       └── speeches.json
+│   ├── processed/                          # 处理后数据
+│   │   ├── events_summary.json
+│   │   ├── macro_analysis.json
+│   │   ├── beliefs.json
+│   │   └── predictions.json
+│   └── pipeline_state/                     # LangGraph 状态持久化
+│       └── session_{id}.json
+│
+├── rag/                                    # RAG 检索模块
+│   ├── __init__.py
+│   ├── vector_retriever.py                 # 向量检索
+├── utils/                                  # 工具函数
+│   ├── __init__.py
+│   ├── text_processor.py                   # 文本清洗、分块
+│   ├── logger.py                           # 日志记录
+│   └── validators.py                       # 输出验证
+│
+├── main.py                                 # 入口：运行完整分析流程
+├── cli.py                                  # 命令行交互接口
+└── tests/                                  # 单元测试
+    ├── test_agents.py
+    └── test_rag.py

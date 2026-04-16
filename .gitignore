@@ -1,0 +1,36 @@
+# Environment / 环境变量（含 API key，绝不提交）
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Data outputs（体积大，含个人分析结果）
+data/processed/
+data/raw/
+data/pipeline_state/
+
+# Vector stores（体积大，由 build 脚本生成）
+../knowledge/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ':*)",
+      "Bash(pip install:*)",
+      "Bash(conda env:*)",
+      "Read(//Users/mengqijia/opt/anaconda3/envs/**)"
+    ]
+  }
+}
