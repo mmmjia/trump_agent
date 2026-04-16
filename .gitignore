@@ -18,8 +18,8 @@ data/processed/
 data/raw/
 data/pipeline_state/
 
-# Vector stores（体积大，由 build 脚本生成）
-../knowledge/
+# Vector stores 由 LFS 管理，不在此忽略
+# Vector stores are managed by Git LFS, not ignored here
 
 # Jupyter
 .ipynb_checkpoints/
